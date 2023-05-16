@@ -1,0 +1,23 @@
+<% layout('/layout') %>
+
+Upload a file to test packaging (either single file or zip)
+
+
+<form action="/test" method="POST" enctype="multipart/form-data">
+
+
+<div class="mb-3">
+<label class="form-label" for="file">Choose file to package:</label>
+<input type="file" class="form-control" id="file" name="file" />
+</div>
+
+<div class="mb-3">
+<input class="btn btn-primary btn-lg form-control" type="submit" />
+</div>
+
+
+<div class="mb-3">
+<p style="color:red"><%= message %> &nbsp;</p>
+</div>
+
+</form>

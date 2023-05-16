@@ -1,0 +1,22 @@
+<% layout('/layout') %>
+
+Request and download a report for a Project Version Id
+
+<form action="/sast/report" method="GET">
+  <div class="form-floating mb-3">
+    <input class="form-control" id="version" name="version" value="<%- version %>" type="text" placeholder="<%- version %>" />
+    <label for="token">Project Version ID</label>
+  </div>
+  <div class="mb-3">
+    <input class="btn btn-primary btn-lg form-control" type="submit" value="Request a PDF report" />
+  </div>
+</form>
+<% if ((typeof messages==="undefined")?false:messages) { %>
+  <div class="mb-3">
+    <ul style="color:red">
+      <% messages.forEach(($)=>{ %>
+        <li><%- $ %></li>
+      <% }) %>
+    </ul>
+  </div>
+<% } %>

@@ -1,0 +1,108 @@
+<% layout('/layout') %>
+
+Check the scan status for a particular Project
+
+<form action="/sast" method="GET">
+  <div class="form-floating mb-3">
+    <input class="form-control" id="project" name="project" value="<%- project %>" type="text" placeholder="<%- project %>" />
+    <label for="token">Project ID</label>
+  </div>
+  <div class="mb-3">
+    <input class="btn btn-primary btn-lg form-control" type="submit" value="Lookup project scan status" />
+  </div>
+</form>
+<% if ((typeof messages==="undefined")?false:messages) { %>
+  <div class="mb-3">
+    <ul style="color:red">
+      <% messages.forEach(($)=>{ %>
+        <li><%- $ %></li>
+      <% }) %>
+    </ul>
+  </div>
+<% } %>
+<% if ((typeof data==="undefined")?false:data) { if (data.versions.length>0) { %>
+  <div class="card text-right">
+    <div class="card-body">
+      <h5 class="font-alt">Project '<%- data.versions[0].project.name %>'</h5>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Version</th>
+            <!--<th scope="col">Description</th>-->
+            <th scope="col" class="text-center">Results</th>
+            <th scope="col" class="text-center">Artifacts</th>
+            <th scope="col" class="text-center">Recent Jobs</th>
+          </tr>
+        </thead>
+        <tbody>
+      <% data.versions.forEach((v)=>{ %>
+        <tr>
+          <th><span data-toggle="tooltip" data-placement="right" title="<%- v.description %>"><%- v.name %></span></th>
+          <!--<td><%- v.description %></td>-->
+          <td class="text-center">
+            <i class="bi-<%- v.currentState.analysisResultsExist?"check-circle":"circle" %> text-gradient" data-toggle="tooltip" data-placement="right" title="<%- (v.currentState.lastFprUploadDate!=null)?(new Date(Date.parse(v.currentState.lastFprUploadDate))).toLocaleString():"" %>"></i>
+          </td>
+          <td class="text-center">
+            <% if (v.artifacts.length>0) { %>
+              <a class="btn badge bg-primary btn-sm w-25" data-bs-toggle="modal" data-bs-target="#artifactsModal<%- v.id %>"><%- v.artifacts.length %></a>
+              <div class="modal fade" id="artifactsModal<%- v.id %>" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-xl">
+                  <div class="modal-content">
+                    <div class="modal-header bg-gradient-primary-to-secondary">
+                        <h5 class="modal-title font-alt text-white">Artifacts for <%- v.name %></h5>
+                        <button class="btn-close btn-close-white" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">File</th>
+                            <th scope="col" class="text-center">Uploaded</th>
+                            <th scope="col" class="text-center">Files</th>
+                            <th scope="col" class="text-center">Lines of Code</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% v.artifacts.forEach((a)=>{ %>
+                          <tr>
+                            <td><%- a.fileName %></td>
+                            <td><%- (new Date(Date.parse(a.uploadDate))).toLocaleString() %></td>
+                            <% if ((a._embed!=null)&&(a._embed.scans!=null)&&(a._embed.scans.length>0)) { %>
+                            <td><%- (a._embed.scans[0].noOfFiles).toLocaleString() %></td>
+                            <td><%- (a._embed.scans[0].totalLOC).toLocaleString() %></td>
+                            <% } else { %>
+                            <td>?</td>
+                            <td>?</td>
+                            <% } %>
+                          </tr> 
+                          <% }) %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+            
+            <% } else { %>            
+              <span class="badge bg-primary w-25 btn">0</span>
+            <% } %>
+          </td>
+          <td class="text-center">
+            <% if (v.scans.length>0) { %>
+              <span class="badge bg-success w-25"><%- v.scans.filter((v) => { return (v.jobState=="UPLOAD_COMPLETED") }).length %></span>
+              <span class="badge bg-danger w-25"><%- v.scans.filter((v) => { return (v.jobState=="UPLOAD_FAILED") }).length %></span>
+              <span class="badge bg-warning text-dark w-25"><%- v.scans.filter((v) => { return ((v.jobState!="UPLOAD_FAILED")&&(v.jobState!="UPLOAD_COMPLETED")) }).length %></span>
+            <% } else { %>            
+              <span class="badge bg-success w-25">0</span>
+              <span class="badge bg-danger w-25">0</span>
+              <span class="badge bg-warning text-dark w-25">0</span>
+            <% } %>
+          </td>
+        </tr>
+      <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% }} %>

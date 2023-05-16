@@ -1,0 +1,38 @@
+<% layout('/layout') %>
+
+Check status on a previously submitted scan job
+
+<form action="/status" method="GET">
+  <div class="form-floating mb-3">
+    <input class="form-control" id="token" name="token" value="<%- token %>" type="text" placeholder="<%- token %>" />
+    <label for="token">Job Token</label>
+  </div>
+  <div class="mb-3">
+    <input class="btn btn-primary btn-lg form-control" type="submit" value="Search for scan job results" />
+  </div>
+<% if ((typeof messages==="undefined")?false:messages) { %>
+  <div class="mb-3">
+    <ul style="color:red">
+      <% messages.forEach(($)=>{ %>
+        <li><%- $ %></li>
+      <% }) %>
+    </ul>
+  </div>
+<% } %>
+<% if ((typeof status==="undefined")?false:status) { %>
+  <div class="card text-center" style="width: 18rem;">
+    <i class="bi-<%- status.icon %> icon-feature text-gradient d-block mb-3"></i>
+    <div class="card-body">
+      <h3 class="font-alt"><%- status.state %></h3>
+      <p class="text-muted mb-0">Upload status: <%- status.sscUploadState %><br/>
+      last verified at: <%- status.time %> </p><br/>
+      <% if (status.files) { %>
+      <p>
+          <a class="btn btn-primary" href="/status/<%- token %>/FPR"><i class="bi-file-earmark-arrow-down"></i> .FPR</a> 
+          <a class="btn btn-primary" href="/status/<%- token %>/LOG"><i class="bi-file-earmark-arrow-down"></i> .LOG</a>
+      </p>
+      <% } %>
+    </div>
+  </div>
+<% } %>
+</form>
