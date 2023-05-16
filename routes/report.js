@@ -13,7 +13,7 @@ const handler = asyncHandler(function(req, res, next) {
 
   const render = function(push) {
     if (push!=null) m.push(push)
-    if (req.accepts('application/json')) {  
+    if (req.accepts('json')&&(!req.accepts('html'))) {  
       return res.status(500).json({ version: v, messages: m });
     } else {  //req.accepts('text/html')
       return res.render('report', { title: 'Report', version: v, messages: m });

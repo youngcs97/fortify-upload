@@ -21,7 +21,7 @@ router.post('/', asyncHandler(async function(req, res, next) {
 
   const render = function(push=null) {
     if (push!=null) messages.push(push)
-    if (req.accepts('application/json')) {  
+    if (req.accepts('json')&&(!req.accepts('html'))) { 
       if (submission==false) {
         return res.status(500).json({success: false, token: (token.length>0)?token:null, messages: messages });
       } else {

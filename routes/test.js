@@ -13,8 +13,8 @@ router.get('/', asyncHandler(async function(req, res, next) {
 router.post('/', asyncHandler(async function(req, res, next) {
   if (!req.files || Object.keys(req.files).length === 0) {
     //return res.render('test', { title: 'Test', message: "No file uploaded" });
-    if (req.accepts('application/json')) {  
-      return res.status(500).json({ message: "No file uploaded" });
+    if (req.accepts('json')&&(!req.accepts('html'))) {
+      return res.status(500).json({ message: "No file uploaded", x: [req.accepts('json'),!req.accepts('html')] });
     } else {  //req.accepts('text/html')
       return res.render('test', { title: 'Test', message: "No file uploaded" });
     }

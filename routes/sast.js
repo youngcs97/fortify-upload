@@ -14,7 +14,7 @@ const handler = asyncHandler(function(req, res, next) {
   }
 
   if (p.length==0) {
-    if (!(typeof req.query.project==="undefined")) render("Please provide a Project Id")
+    if (!(typeof req.query.project==="undefined")) return render("Please provide a Project Id")
     return render()
   } else {
     //if ((((req.params.project||'').trim()).length==0)) render("Please provide a Project Id")
@@ -25,7 +25,7 @@ const handler = asyncHandler(function(req, res, next) {
       (r)=>{
         //require("fs").writeFileSync("./projectscans.json", JSON.stringify(r,null,4))
         d = r
-        if (d.versions.length==0) render("Nothing found for this ProjectId")
+        if (d.versions.length==0) return render("Nothing found for this ProjectId")
         return render()
       },
       (r)=>{

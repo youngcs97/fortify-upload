@@ -1,6 +1,8 @@
 # fortify-upload using CURL
 Below are examples how to interact with this Express application via CURL
 
+`Note: I have just changed all command lines to support the "*/json" accept header.  Not provising a JSON-compatible accept type will return HTML instead.` 
+
 # [![curl logo](https://curl.se/logo/curl-logo.svg)](https://curl.se/)
 
 or, if you are old-school like me...
@@ -135,7 +137,7 @@ Then, to run a upload with the file named `sourcecode.packaged.zip` and key `hel
 
 ```console
 
-root@localhost fortify-upload % curl -i -F "file=@sourcecode.packaged.zip" -F "token=helloworld" http://localhost:4000/upload
+root@localhost fortify-upload % curl -i -H "accept:*/json" -F "file=@sourcecode.packaged.zip" -F "token=helloworld" http://localhost:4000/upload
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
@@ -159,7 +161,7 @@ If attempting to submit again, you'll recieve a 500 error and a description of t
 
 ```console
 
-root@localhost fortify-upload % curl -i -F "file=@sourcecode.packaged.zip" -F "token=helloworld" http://localhost:4000/upload
+root@localhost fortify-upload % curl -i -H "accept:*/json" -F "file=@sourcecode.packaged.zip" -F "token=helloworld" http://localhost:4000/upload
 HTTP/1.1 500 Internal Server Error
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
@@ -177,7 +179,7 @@ Keep-Alive: timeout=5
 Dropping the `-i` switch will eliminate header printing:
 
 ```
-root@localhost fortify-upload % curl -F "file=@sourcecode.packaged.zip" -F "token=helloworld" http://localhost:4000/upload   
+root@localhost fortify-upload % curl -H "accept:*/json" -F "file=@sourcecode.packaged.zip" -F "token=helloworld" http://localhost:4000/upload   
 {"success":false,"token":"helloworld","messages":["Previously submitted on 'Mon May 15 2023 18:51:21 GMT-0400 (Eastern Daylight Time)' with jobtoken '********-18ba-4ab2-83cf-************'.","Must wait 12 hours before submitting again."]}
 
 ```
@@ -188,12 +190,12 @@ root@localhost fortify-upload % curl -F "file=@sourcecode.packaged.zip" -F "toke
 Examples show how to test the packaging process to ensure good files are sent:
 
 ```
-root@localhost fortify-upload % curl -F "file=@sourcecode.unpackaged.zip" http://localhost:4000/test > test.unpackaged.zip 
+root@localhost fortify-upload % curl -H "accept:*/json" -F "file=@sourcecode.unpackaged.zip" http://localhost:4000/test > test.unpackaged.zip 
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100 17874  100 15571  100  2303   140k  21212 --:--:-- --:--:-- --:--:--  174k
 
-root@localhost fortify-upload % curl -F "file=@sourcecode.packaged.zip" http://localhost:4000/test > test.packaged.zip
+root@localhost fortify-upload % curl -H "accept:*/json" -F "file=@sourcecode.packaged.zip" http://localhost:4000/test > test.packaged.zip
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100  864k  100  636k  100  228k  6378k  2288k --:--:-- --:--:-- --:--:-- 9393k
@@ -208,7 +210,7 @@ If you botch the command line syntax, you'll recieve a 500 error:
 
 ```
 
-root@localhost fortify-upload % curl -F "file=zx" http://localhost:4000/test
+root@localhost fortify-upload % curl -H "accept:*/json" -F "file=zx" http://localhost:4000/test
 {"message":"No file uploaded"}
 
 ```
@@ -217,7 +219,7 @@ The same applies to the upload command.  Note the `@` symbol was dropped from th
 
 ```
 
-root@localhost fortify-upload % curl -F "file=sourcecode.packaged.zip" -F "token=helloworld" http://localhost:4000/upload
+root@localhost fortify-upload % curl -H "accept:*/json" -F "file=sourcecode.packaged.zip" -F "token=helloworld" http://localhost:4000/upload
 {"success":false,"token":"helloworld","messages":["No file uploaded"]}
 
 ```
@@ -233,7 +235,7 @@ Note that you'll need to provide the ProjectVersion Id (example `12345`) and the
 
 ```
 
-root@localhost fortify-upload % curl http://localhost:4000/sast/report/12345 > reportxyz.pdf
+root@localhost fortify-upload % curl -H "accept:*/json" http://localhost:4000/sast/report/12345 > reportxyz.pdf
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100  239k  100  239k    0     0  27431      0  0:00:08  0:00:08 --:--:-- 52059
@@ -244,7 +246,7 @@ Attempting to provide a non-numeric value (example `XYZ`) will error with a 500:
 
 ```
 
-root@localhost fortify-upload % curl http://localhost:4000/sast/report/XYZ
+root@localhost fortify-upload % curl -H "accept:*/json" http://localhost:4000/sast/report/XYZ
 {"version":"XYZ","messages":["Project Version Id 'XYZ' must be an integer value"]}
 
 ```
