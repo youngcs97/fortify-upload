@@ -296,7 +296,6 @@ const upload = {
                 "fortify-client" : client
             }
         }
-        const file = "zipWrapper.zip"
         var f = new require('form-data')();
         f.append("zipFile", data, { "filename": filename, "contentType": "application/zip" });
         f.append("username", user)
