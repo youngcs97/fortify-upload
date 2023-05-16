@@ -53,7 +53,7 @@ ___.               _________  .__            .__             _____.___.         
 ## Getting started / Firing up the Express site
 
 
-First, make sure to fetch your node_module dependencies by starting with an npm update -- [package.json](package.json) contains the required dependencies and they may be fetched using:
+First, make sure to fetch your node_module dependencies by starting with an npm update -- [package.json](package.json) contains the required dependencies and they may be updated using:
 
 ```console
 
@@ -86,7 +86,7 @@ To effectively test, you'll need some source code to zip up and package.  The sc
 
 This is an optional step which may be required for advanced use cases.  Otherwise, simple projects can simply have their source code zipped using regular old zip tools.
 
-[Install](https://www.microfocus.com/documentation/fortify-software-security-center/2220/SC_SAST_Guide_22.2.0.pdf) the [Scan Central Client](https://tools.fortify.com/scancentral/Fortify_ScanCentral_Client_22.1.0_x64.zip) which is available from the SFTP site provided in your welcome packet, including binariess for other platforms besides windows.  This [github actions project](https://github.com/fortify/gha-setup-scancentral-client) is also handy.
+[Install](https://www.microfocus.com/documentation/fortify-software-security-center/2220/SC_SAST_Guide_22.2.0.pdf) the [Scan Central Client](https://tools.fortify.com/scancentral/Fortify_ScanCentral_Client_22.1.0_x64.zip) which is available from the SFTP site provided in your welcome packet, including binaries for other platforms besides windows.  This [github actions project](https://github.com/fortify/gha-setup-scancentral-client) is also handy.
 
 ```console
 
