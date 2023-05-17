@@ -1,7 +1,7 @@
 # fortify-upload using CURL
 Below are examples how to interact with this Express application via CURL
 
-`Note: I have just changed all command lines to support the "*/json" accept header.  Not provising a JSON-compatible accept type will return HTML instead.` 
+`Note: I have changed all command lines to support the "*/json" accept header.  Not providing a JSON-compatible accept type will return HTML instead.` 
 
 # [![curl logo](https://curl.se/logo/curl-logo.svg)](https://curl.se/)
 
