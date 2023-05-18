@@ -161,6 +161,22 @@ const projects = {
             headers: _.headers()
         }
         return _.request(o, nullull, true);
+    },
+    /**
+     * Returns the ProjectVersionId given a Project and Version name
+     * @param {string} project 
+     * @param {string} version 
+     * @returns Promise with the results of the http request
+     */
+    projectversionid(project, version) {
+        $(`project.versions.request(${project},${version})`);
+        var q = encodeURI(`project.name:"${project}",name:"${version}"`)
+        var o = {
+            method: 'GET',
+            url: `${_.url}/api/v1/projectVersions?fields=id,project&q=${q}&fulltextsearch=false&includeInactive=false&myAssignedIssues=false&onlyIfHasIssues=false`,
+            headers: _.headers()
+        }
+        return _.request(o, null, true);
     }
 }
 
@@ -504,7 +520,14 @@ const fortify = {
          * @returns Promise that resolves to PDF file data
          */
         report: sast.report
-    } 
+    },
+    /**
+     * Returns the ProjectVersionId given a Project and Version name
+     * @param {string} project 
+     * @param {string} version 
+     * @returns Promise with the results of the http request
+     */
+    projectversionid: projects.projectversionid
 }
 module.exports = fortify
 

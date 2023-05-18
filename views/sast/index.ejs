@@ -4,8 +4,8 @@ Check the scan status for a particular Project
 
 <form action="/sast" method="GET">
   <div class="form-floating mb-3">
-    <input class="form-control" id="project" name="project" value="<%- project %>" type="text" placeholder="<%- project %>" />
-    <label for="token">Project ID</label>
+    <input class="form-control" id="project" name="token" value="<%- token %>" type="text" placeholder="<%- token %>" />
+    <label for="token">Token</label>
   </div>
   <div class="mb-3">
     <input class="btn btn-primary btn-lg form-control" type="submit" value="Lookup project scan status" />

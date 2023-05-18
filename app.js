@@ -26,8 +26,8 @@ app.use('/', require('./routes/index'));
 app.use('/test', require('./routes/test'));
 app.use('/upload', require('./routes/upload'));
 app.use('/status', require('./routes/status'));
-app.use('/sast', require('./routes/sast'));
-app.use('/sast/report', require('./routes/report'));
+app.use('/sast', require('./routes/sast/index'));
+app.use('/sast/report', require('./routes/sast/report'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

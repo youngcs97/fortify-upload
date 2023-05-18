@@ -17,6 +17,14 @@ const tokens = {
      */
     save: function(value) {
         fs.writeFileSync(path,JSON.stringify(value, null, 4),"utf-8")   // save to file in pretty format
+    },
+
+
+    find: function(key, tokens=null) {
+        if (tokens==null) tokens = this.read()
+        const r = { url: tokens.url, client: tokens.client }
+        r.token = tokens.tokens.find(x => x.key.trim().toLowerCase()==key.trim().toLowerCase())  // find token by key:name
+        return r
     }
 }
 module.exports = tokens

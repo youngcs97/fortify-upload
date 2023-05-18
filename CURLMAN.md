@@ -1,7 +1,7 @@
 # fortify-upload using CURL
-`Note: I have changed all command lines to support the "*/json" accept header.  Not providing a JSON-compatible accept type will return HTML instead.` 
-
 Below are examples how to interact with this Express application via CURL
+
+`Note: I have changed all command lines to support the "*/json" accept header.  Not providing a JSON-compatible accept type will return HTML instead.` 
 
 # [![curl logo](https://curl.se/logo/curl-logo.svg)](https://curl.se/)
 
@@ -231,23 +231,14 @@ After giving your application some time to scan you may request a PDF report to 
 
 ![Report](report.png)
 
-Note that you'll need to provide the ProjectVersion Id (example `12345`) and the output file (example `reportxyz.pdf`):
+Note that you'll need to provide a token (example `helloworld`) and the output file (example `reportxyz.pdf`):
 
 ```
 
-root@localhost fortify-upload % curl -H "accept:*/json" http://localhost:4000/sast/report/12345 > reportxyz.pdf
+root@localhost fortify-upload % curl -H "accept:*/json" http://localhost:4000/sast/report/helloworld > reportxyz.pdf
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100  239k  100  239k    0     0  27431      0  0:00:08  0:00:08 --:--:-- 52059
-
-```
-
-Attempting to provide a non-numeric value (example `XYZ`) will error with a 500:
-
-```
-
-root@localhost fortify-upload % curl -H "accept:*/json" http://localhost:4000/sast/report/XYZ
-{"version":"XYZ","messages":["Project Version Id 'XYZ' must be an integer value"]}
 
 ```
 

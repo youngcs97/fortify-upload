@@ -25,7 +25,7 @@ Upload your application source code to the Software Security Center portal (requ
         <p class="text-muted mb-0">JobToken: <%- jobtoken %></p>
         <br/>
         <p class="text-center">
-            <a class="btn btn-outline-primary btn-lg text-gradient" href="/status/<%- jobtoken %>"><i class="bi-patch-question"></i> Check job status</a> 
+            <a class="btn btn-outline-primary btn-lg text-gradient" href="/status/<%- token %>"><i class="bi-patch-question"></i> Check job status</a> 
         </p>
     </div>
     </div>
@@ -39,7 +39,7 @@ Upload your application source code to the Software Security Center portal (requ
     </ul>
     <% if ((typeof jobtoken==="undefined")?false:jobtoken) { %>
     <p class="text-center">
-        <a class="btn btn-outline-primary btn-lg text-gradient" href="/status/<%- jobtoken %>"><i class="bi-patch-question"></i> Check job status</a> 
+        <a class="btn btn-outline-primary btn-lg text-gradient" href="/status/<%- token %>"><i class="bi-patch-question"></i> Check job status</a> 
     </p>
     <% } %>
     </div>
