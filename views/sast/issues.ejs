@@ -1,0 +1,49 @@
+<% layout('/layout') %>
+
+Quick and dirty filter
+
+
+<% if ((typeof messages==="undefined")?false:messages) { %>
+  <div class="mb-3">
+    <ul style="color:red">
+      <% messages.forEach(($)=>{ %>
+        <li><%- $ %></li>
+      <% }) %>
+    </ul>
+  </div>
+<% } %>
+
+
+<% if (!(typeof data.issueGroups.data==="undefined")) { %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <!--<th scope="col">Description</th>-->
+        <th scope="col" class="text-center">Descr</th>
+        <th scope="col" class="text-center">File</th>
+        <th scope="col" class="text-center">Line</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (var j=0; j<data.issueGroups.data.length; j++) { 
+        ig = data.issueGroups.data[j]
+        is = data.issues.data[j].responses[0].body.data
+        %>
+        <tr class="table-primary"><td colspan="4"><%- ig.cleanName %></td></tr>
+        <% for (var i=0; i<is.length; i++) { 
+          it = is[i]
+          %>
+          <tr>
+            <td><%- it.id %></td>
+            <td><%- it.issueName %></td>
+            <td><span data-toggle="tooltip" data-placement="right" title="<%- it.fullFileName %>"><%- it.primaryLocation %></span>
+            </td>
+            <td><%- it.lineNumber %></td>
+          </tr>
+        <% } %>
+      <% } %>
+    </tbody>
+  </table>
+<% } %>
+

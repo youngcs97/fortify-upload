@@ -2,7 +2,8 @@
 const debug = !module.parent
 const $ = function (message) { if (debug) console.log(message) }
 const rq = require("request");
-const config = require("./fortify-api.config.json")
+const config = require("./fortify-api.config.json");
+const { urlencoded } = require("express");
 const _ = {
     url: config.url,
     token: config.token,
@@ -498,6 +499,109 @@ const sast = {
     }
 }
 
+const issues = {
+    byprojectversionid: async function(id, groupingtype=null, filterset=null) {
+        // const groupingtypes = [
+        //     { name: "DefaultGrouping", id: null },       // FOLDER is API value
+        //     { name: "CWE", id: "3ADB9EE4-5761-4289-8BD3-CBFCC593EBBC" },
+        //     { name: "OWASP_ASVS_4.0", id: "28083E33-760F-4A1A-AADA-738CC60082AD" },
+        //     { name: "GDPR", id: "771C470C-9274-4580-8556-C12F5E4BEC51" }
+        // ] 
+        const f = ((filterset||"").trim().length==0) ? "" : `&filterset=${encodeURI((filterset||"").trim())}`
+        const url = function(suffix="s") {
+            return `${_.url}/api/v1/projectVersions/${encodeURI(id)}/issue${suffix}?orderby=friority&showhidden=false&showremoved=false&showsuppressed=false&showshortfilenames=true${f}`
+        }
+        const g = (groupingtype||"FOLDER").trim()
+        $(g)
+        if (g=="FOLDER") {
+            // this is default grouping, no need to iterate through group -- just do one request for both issueGroups and issues
+            let o = {
+                method: 'POST', url: `${_.url}/api/v1/bulk`, headers: _.headers(), 
+                body: JSON.stringify({ "requests": [
+                    { "httpVerb": "GET", "uri": url("Groups")+`&qm=issues&groupingtype=FOLDER` },
+                    { "httpVerb": "GET", "uri": url() }
+                ]})
+            }
+            return new Promise((resolve, reject) => {
+                _.request(o, null, true).then((r)=>{
+                    if (r.successCount!=2) reject("Could not gather grouped issues")
+                    // used bulk api, thus we need to make the return look like it was two separate requests (matching the output of the else statement below)
+                    const i = r.data.pop()  // thus we pop the last item off of the 2 requests -- this is the issues query
+                    const ig = r.data.pop() // grab the issueGroups too
+                    r.data.push(i)  // push the items back onto to the data array so it looks like a standalone bulk api call
+                    r.count=1   // descrement the counters so the statistics match after removing the groups query
+                    r.successCount=1
+                    resolve({ "issueGroups" : ig.responses[0].body, "issues" : r})  // this will look like the else return below
+                },(r)=>{ reject(r.body) })
+            });
+        } else {
+            return new Promise((resolve, reject) => {
+                let o = {
+                    method: 'GET',
+                    url: url("Groups")+`&qm=issues&groupingtype=${encodeURI(g)}`,
+                    headers: _.headers()
+                }   // fetch the issue groups and wait until the promise returns (need the grouping returned before next requests)
+                _.request(o, null, true).then((r)=>{
+                    if (r.data==null) reject("Could not gather grouped issues")
+                    const rq = []   // make an array to push items onto for a bulk api request
+                    r.data.forEach((x)=>{
+                        rq.push({ "httpVerb": "GET", "uri": `${url()}&groupid=${encodeURI(x.id)}&groupingtype=${encodeURI(g)}` })  // for each grouping, grab the matching issues
+                    })
+                    o = { method: 'POST', url: `${_.url}/api/v1/bulk`, headers: _.headers(), body: JSON.stringify({ "requests": rq}) }  // bulk api
+                    _.request(o, null, true).then((r2)=>{
+                        resolve({ "issueGroups" : r, "issues" : r2})  // return inner (issues) and outer (issueGroups) promises
+                    },(r2)=>{ reject(r.body) })
+                },(r)=>{ reject(r.body) })
+            });
+        }
+    },
+    details: async function(id) {
+        if (Array.isArray(id)==false) id=[id]
+        const rq = []   // make an array to push items onto for a bulk api request
+        id.forEach((id)=>{  // parse to Int and push onto request stack
+            if (parseInt(id)!=NaN) rq.push({ "httpVerb": "GET", "uri": `${_.url}/api/v1/issueDetails/${encodeURI(id)}` })  // for each grouping, grab the matching issues
+        })
+        // bulk api request
+        const o = { method: 'POST', url: `${_.url}/api/v1/bulk`, headers: _.headers(), body: JSON.stringify({ "requests": rq}) }  // bulk api
+        return _.request(o, null, true)
+    },
+    projectissueswithdetails: async function(project, version, groupingtype=null, filterset=null) {
+        return new Promise((resolve, reject) => {
+            projects.projectversionid(project, version).then((r)=>{
+                const pv = parseInt(r.data[0].id)
+                issues.byprojectversionid(pv, groupingtype, filterset).then((r)=>{
+                    const id = []
+                    r.issues.data.forEach((x)=>{
+                        x.responses[0].body.data.forEach((i)=>{
+                            id.push(i.id)
+                        })
+                    })
+                    issues.details(id).then((d)=>{
+                        r.details = d
+                        r.projectVersionId = pv
+                        resolve(r)
+                    },(r)=>{ reject(r.body) })
+                },(r)=>{ reject(r.body) })
+            },(r)=>{ reject(r.body) })
+        });
+    }
+}
+/*/
+async function test() {
+    const fs = require("fs")
+    const groupingtypes = [
+        { name: "DefaultGrouping", id: null },
+        { name: "CWE", id: "3ADB9EE4-5761-4289-8BD3-CBFCC593EBBC" },
+        { name: "OWASP_ASVS_4.0", id: "28083E33-760F-4A1A-AADA-738CC60082AD" },
+        { name: "GDPR", id: "771C470C-9274-4580-8556-C12F5E4BEC51" }
+    ]
+    let firsttime = true
+    groupingtypes.forEach(async (t)=>{
+        const x = await issues.projectissueswithdetails("MyApp","1.0", t.id)
+        fs.writeFileSync(`${x.projectVersionId}_${t.name}.json`, JSON.stringify(x, null, 4))
+    })
+}
+test()  //*/
 
 /**
  * Module for querying Fortify SSC APIs
@@ -527,7 +631,25 @@ const fortify = {
      * @param {string} version 
      * @returns Promise with the results of the http request
      */
-    projectversionid: projects.projectversionid
+    projectversionid: projects.projectversionid,
+
+    /**
+     * Module to collect issues by category
+     */
+    issuesBy: { 
+        default: async function(project, version, filterset=null) {
+            return issues.projectissueswithdetails(project, version, null, filterset)
+        },
+        CWE: async function(project, version, filterset=null) {
+            return issues.projectissueswithdetails(project, version, "3ADB9EE4-5761-4289-8BD3-CBFCC593EBBC", filterset)
+        },
+        OWASPASVS40: async function(project, version, filterset=null) {
+            return issues.projectissueswithdetails(project, version, "28083E33-760F-4A1A-AADA-738CC60082AD", filterset)
+        },
+        GDPR: async function(project, version, filterset=null) {
+            return issues.projectissueswithdetails(project, version, "771C470C-9274-4580-8556-C12F5E4BEC51", filterset)
+        }
+    }
 }
 module.exports = fortify
 
