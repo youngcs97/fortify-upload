@@ -85,7 +85,7 @@ const tokens = {
                 }
             }
             const where = ((w.length==0)?"":" WHERE "+w.join(" AND "))
-            let q = `SELECT p.id,p.token,p.project,p.version,p.user,p.submit,p.previous FROM pwc p ${where} ORDER BY p.id OFFSET ${page*200} LIMIT 200`
+            let q = `SELECT p.id,p.token,p.project,p.version,p.user,p.submit,p.previous FROM ${config.tokens.container} p ${where} ORDER BY p.id OFFSET ${page*200} LIMIT 200`
             q = {
                 query: q,
                 parameters: p
