@@ -10,7 +10,7 @@ List SAST security issues for a particular Project
   <div class="form-floating mb-3">
     <select class="form-select" name="group" id="floatingSelectGroup" aria-label="Group by">
       <% [["","None (default)"],["CWE","CWE"],["OWASPASVS40","OWASPASVS40"],["GDPR","GDPR"]].forEach((x)=> { 
-        s = (group==x[0]) ? "selected" : ""
+        s = (x[0]==(group||"")) ? "selected" : ""
         %>
         <option value="<%- x[0] %>" <%- s %>><%- x[1] %></option>
       <% }) %>
