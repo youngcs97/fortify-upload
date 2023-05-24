@@ -2,13 +2,12 @@
 
 Upload your application source code to the Software Security Center portal (requires a token and a file, either a single file or a zip)
 
-
 <form action="/upload" method="POST" enctype="multipart/form-data" class="needs-validation">
     <div class="mb-3">
-        <input type="file" class="form-control" name="file" required="true" />
+        <input class="form-control" id="file" name="file" type="file" required="true" />
     </div>
     <div class="form-floating mb-3">
-        <input class="form-control" required="true" id="token" name="token" value="<%- token %>" type="text" />
+        <input class="form-control" id="token" required="true" name="token" value="<%- token %>" type="text" />
         <label for="token">Token (provided in your welcome package)</label>
     </div>
     <div class="mb-3">
