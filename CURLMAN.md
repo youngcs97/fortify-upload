@@ -108,9 +108,9 @@ The process below is the curl command line equivalent of working with the `/uplo
 
 ![Upload Screen](upload.png)
 
-First, be sure to edit [tokens.json](tokens.json) so that it contains valid tokens.  Each token object contains several properties:
+First, be sure to edit [.tokens.json](.tokens.json) so that it contains valid tokens.  Each token object contains several properties:
 
-1. **key** : Single-Use-Token that can be freeform and as complex as you desire.  This is the lookup key (examples use `helloworld`) when running curl commands below.
+1. **id** : Single-Use-Token that can be freeform and as complex as you desire.  This is the lookup key (examples use `helloworld`) when running curl commands below.
 2. **token** : A valid ScanCentral token in the GUID-style format
 3. **project**: The project name this scan will apply to in SSC (example `XYZ`)
 4. **version**: The version to which this will apply (example `8.0`)
@@ -119,21 +119,19 @@ First, be sure to edit [tokens.json](tokens.json) so that it contains valid toke
 ```javascript
 
 {
-    "client": "************************************************",
-    "url": "https://scsastctrl.fortifyhosted.com/scancentral-ctrl/rest/v2/job",
     "tokens": [
         {
-            "key": "helloworld",
+            "id": "helloworld",
             "token": "********-****-****-****-************"
-            "project": "XYZ",
-            "version": "8.0",
-            "user": "hello.world@domain.com",
+            "project": "MyProject",
+            "version": "1.0",
+            "user": "hello.world@domain.com"
 
 ```
 
 
 
-Then, to run a upload with the file named `sourcecode.packaged.zip` and key `helloworld`:
+Then, to run a upload with the file named `sourcecode.packaged.zip` and id `helloworld`:
 
 ```console
 

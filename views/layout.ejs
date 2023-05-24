@@ -8,7 +8,7 @@
         <title>Fortify SAST <%- (typeof title === "undefined")?"":`- ${title}` %></title>
         <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
         <!-- Bootstrap icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <link href="/css/bootstrap-icons.css" rel="stylesheet" />
         <!-- Google fonts-->
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,600;1,600&amp;display=swap" rel="stylesheet" />
@@ -30,6 +30,7 @@
                     <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
                         <li class="nav-item"><a class="nav-link me-lg-3" href="/test">Test Packaging Process</a></li>
                         <li class="nav-item"><a class="nav-link me-lg-3" href="/upload">Submit A Scan</a></li>
+                        <li class="nav-item"><a class="nav-link me-lg-3" href="/status">Check Status</a></li>
                     </ul>
                     <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" data-bs-toggle="modal" data-bs-target="#feedbackModal">
                         <span class="d-flex align-items-center">
@@ -50,9 +51,7 @@
                             <h1 class="display-1 lh-1 mb-3">Build secure software fast.</h1>
                             <p class="lead fw-normal text-muted mb-5">
 
-
-<%-body -%>
-
+<%- body -%>
 
 
                             </p>
@@ -61,7 +60,7 @@
                     <div class="col-lg-6">
                         <!-- Masthead device mockup feature-->
                         <div class="masthead-device-mockup">
-                            <svg class="circle" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <svg class="circle" viewBox="0 0 100 100">
                                 <defs>
                                     <linearGradient id="circleGradient" gradientTransform="rotate(45)">
                                         <stop class="gradient-start-color" offset="0%"></stop>
@@ -69,10 +68,10 @@
                                     </linearGradient>
                                 </defs>
                                 <circle cx="50" cy="50" r="50"></circle></svg>
-                                <svg class="shape-1 d-none d-sm-block" viewBox="0 0 240.83 240.83" xmlns="http://www.w3.org/2000/svg">
+                                <svg class="shape-1 d-none d-sm-block" viewBox="0 0 240.83 240.83">
                                 <rect x="-32.54" y="78.39" width="305.92" height="84.05" rx="42.03" transform="translate(120.42 -49.88) rotate(45)"></rect>
                                 <rect x="-32.54" y="78.39" width="305.92" height="84.05" rx="42.03" transform="translate(-49.88 120.42) rotate(-45)"></rect></svg>
-                                <svg class="shape-2 d-none d-sm-block" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <svg class="shape-2 d-none d-sm-block" viewBox="0 0 100 100">
                                 <circle cx="50" cy="50" r="50"></circle>
                             </svg>
                             <div class="device-wrapper">
@@ -149,7 +148,7 @@
                     <div class="col-lg-4 order-lg-0">
                         <!-- Features section device mockup-->
                         <div class="features-device-mockup">
-                            <svg class="circle" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <svg class="circle" viewBox="0 0 100 100">
                                 <defs>
                                     <linearGradient id="circleGradient" gradientTransform="rotate(45)">
                                         <stop class="gradient-start-color" offset="0%"></stop>
@@ -158,11 +157,11 @@
                                 </defs>
                                 <circle cx="50" cy="50" r="50"></circle>
                             </svg>
-                            <svg class="shape-1 d-none d-sm-block" viewBox="0 0 240.83 240.83" xmlns="http://www.w3.org/2000/svg">
+                            <svg class="shape-1 d-none d-sm-block" viewBox="0 0 240.83 240.83">
                                 <rect x="-32.54" y="78.39" width="305.92" height="84.05" rx="42.03" transform="translate(120.42 -49.88) rotate(45)"></rect>
                                 <rect x="-32.54" y="78.39" width="305.92" height="84.05" rx="42.03" transform="translate(-49.88 120.42) rotate(-45)"></rect>
                             </svg>
-                            <svg class="shape-2 d-none d-sm-block" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50"></circle></svg>
+                            <svg class="shape-2 d-none d-sm-block" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
                             <div class="device-wrapper">
                                 <div class="device" data-device="iPhoneX" data-orientation="portrait" data-color="black">
                                     <div class="screen bg-black">
@@ -188,7 +187,7 @@
                         <p class="lead fw-normal text-muted mb-5 mb-lg-0">Fortify Static Code Analyzer (SCA) pinpoints the root cause of security vulnerabilities in the source code, prioritizes the most serious issues, and provides detailed guidance on how to fix them so developers can resolve issues in less time with centralized software security management.</p>
                     </div>
                     <div class="col-sm-8 col-md-6">
-                        <div class="px-5 px-sm-0"><img class="img-fluid rounded-circle" src="https://source.unsplash.com/u8Jn2rzYIps/900x900" alt="..." /></div>
+                        <div class="px-5 px-sm-0"><img class="img-fluid rounded-circle" src="/assets/img/nebula.jpeg" alt="..." /></div>
                     </div>
                 </div>
             </div>
@@ -211,8 +210,8 @@
             <div class="container px-5">
                 <h2 class="text-center text-white font-alt mb-4">Prepare your apps now!</h2>
                 <div class="d-flex flex-column flex-lg-row align-items-center justify-content-center">
-                    <a class="me-lg-3 mb-4 mb-lg-0" href="#!"><img class="app-badge" src="/assets/img/google-play-badge.svg" alt="..." /></a>
-                    <a href="#!"><img class="app-badge" src="/assets/img/app-store-badge.svg" alt="..." /></a>
+                    <a class="me-lg-3 mb-4 mb-lg-0"><img class="app-badge" src="/assets/img/google-play-badge.svg" alt="..." /></a>
+                    <a><img class="app-badge" src="/assets/img/app-store-badge.svg" alt="..." /></a>
                 </div>
             </div>
         </section>
@@ -246,9 +245,9 @@
             </div>
         </div>
         <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
-        <script src="js/scripts.js"></script>
+        <script src="/js/scripts.js"></script>
         <% if ((typeof tooltips === "undefined")?false:tooltips) { %>
         <script>
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'))

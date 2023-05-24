@@ -1,0 +1,20 @@
+{
+    "tokens": {
+        "type": "cosmos",
+        "connectionstring": "AccountEndpoint=https://*.azure.com:443/;AccountKey=******=;",
+        "database": "fortify",
+        "container": "yourNamedCollection",
+        "authorization": "some-long-value-that-you-make-up-to-secure-certain-curl-endpoints",
+        "default": "default-value-(a-real-CIToken)-to-help-you-preload-testing-accounts-with-tokens.cosmos.js.init()"
+    },
+    "ssc": {
+        "url": "https://ssc.fortifyhosted.com",
+        "token": "************************************************",
+        "decoded": "********-****-****-****-************",
+        "basic": "username:password"
+    },
+    "sast": {
+        "url": "https://scsastctrl.fortifyhosted.com/scancentral-ctrl",
+        "client": "************************************************"
+    }
+}

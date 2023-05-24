@@ -1,0 +1,84 @@
+<% layout('/layout') %>
+
+CURL helper for editing tokens.  Enter your Authorization code to continue.
+<form action="/tokens/html" method="POST">
+    <div class="form-floating mb-3">
+        <input class="form-control" id="authorization" name="authorization" value="<%- authorization %>" type="text" placeholder="<%- authorization %>" />
+        <label for="auth">Authorization code</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" id="filter" name="filter" value="<%= filter %>" type="text" placeholder="<%= filter %>" />
+        <label for="filter">Filter query that is valid JSON (example: {"version":"1.0"})</label>
+    </div>
+    <div class="mb-3">
+        <input class="btn btn-primary btn-lg form-control" type="submit" />
+    </div>
+</form>
+
+<div class="mb-3">
+    <ul style="color:red">
+        <% if ((typeof messages==="undefined")==false) { 
+            messages.forEach(($)=>{ %>
+        <li><%- $ %></li>
+        <% })} %>
+    </ul>
+</div>
+<%- partial('partial/curl') %>
+
+
+<% if (!(typeof data==="undefined")&&(data!=null)) { %>
+  <div class="card text-right">
+    <div class="card-body">
+    <script lang="javascript">
+        function copy(text) {
+            navigator.clipboard.writeText(text)
+            document.getElementById("curl").innerText=text
+        }
+        function post(json) {
+            text = "curl --header \"Content-Type: application/json\" --request POST --data '"+json+"' \"<%- url %>\""
+            copy(text)
+        }
+        function put(json){
+            text = "curl --header \"Content-Type: application/json\" --request PUT --data '"+json+"' \"<%- url %>\""
+            copy(text)
+        }
+        function del(json){
+            text = "curl --header \"Content-Type: application/json\" --request DELETE --data '"+json+"' \"<%- url %>\""
+            copy(text)
+        }
+    </script>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="text-center">Project</th>
+          <th scope="col" class="text-center">Version</th>
+          <th scope="col" class="text-center">User</th>
+          <th scope="col" class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (var j=0; j<data.length; j++) { 
+          t = data[j] 
+          i = {}
+          i.id = t.id
+          i.authorization = authorization
+          delete t.previous
+          delete t.submit
+          t.authorization = authorization
+          %>
+            <tr>
+              <td><%- t.project %></td>
+              <td><%- t.version %></td>
+              <td><%- t.user %></td>
+              <td>
+                  <a class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="right" title="<%- t.id %>" onclick='javascript:post("<%- JSON.stringify(i).replaceAll("\"","\\\"") %>")'><i class="bi bi-arrow-down-circle"></i></a>
+                  <a class="btn btn-warning btn-sm" onclick='javascript:put("<%- JSON.stringify(t).replaceAll("\"","\\\"") %>")'><i class="bi bi-arrow-up-circle"></i></a>
+                  <a class="btn btn-danger btn-sm" onclick='javascript:del("<%- JSON.stringify(i).replaceAll("\"","\\\"") %>")'><i class="bi bi-trash"></i></a>
+              </td>
+            </tr>
+        <% } %>
+      </tbody>
+    </table>
+    </div>
+  </div>
+<% } %>

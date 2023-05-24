@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
-
 const asyncHandler = require('express-async-handler')
 
+// helps display a curl command for this url
+require("../util.js")
+const curl = function(req) { return `curl -H "accept:*/json" -F "file=@YourFile.zip" "${util.host(req)}/test" > YourOutputFile.zip` }
+
 router.get('/', asyncHandler(async function(req, res, next) {
-  return res.render('test', { title: 'Test', message: "&nbsp;" });
+  return res.render('test', { title: 'Test', message: "&nbsp;", curl: curl(req) });
 }));
 
 // curl -F "file=@sourcecode.packaged.zip" http://localhost:4000/test > test.packaged.zip
@@ -16,7 +19,7 @@ router.post('/', asyncHandler(async function(req, res, next) {
     if (req.accepts('json')&&(!req.accepts('html'))) {
       return res.status(500).json({ message: "No file uploaded", x: [req.accepts('json'),!req.accepts('html')] });
     } else {  //req.accepts('text/html')
-      return res.render('test', { title: 'Test', message: "No file uploaded" });
+      return res.render('test', { title: 'Test', message: "No file uploaded", curl: curl(req) });
     }
   }
   const f = req.files[Object.keys(req.files)[0]]

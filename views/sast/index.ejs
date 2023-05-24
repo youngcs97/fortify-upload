@@ -2,10 +2,10 @@
 
 Check the scan status for a particular Project
 
-<form action="/sast" method="GET">
+<form action="/sast" method="POST">
   <div class="form-floating mb-3">
-    <input class="form-control" id="project" name="token" value="<%- token %>" type="text" placeholder="<%- token %>" />
-    <label for="token">Token</label>
+    <input class="form-control" id="token" name="token" value="<%- token %>" type="text" />
+    <label for="token">Token (provided in your welcome package)</label>
   </div>
   <div class="mb-3">
     <input class="btn btn-primary btn-lg form-control" type="submit" value="Lookup project scan status" />
@@ -20,6 +20,8 @@ Check the scan status for a particular Project
     </ul>
   </div>
 <% } %>
+<%- partial('../partial/curl') %>
+
 <% if ((typeof data==="undefined")?false:data) { if (data.versions.length>0) { %>
   <div class="card text-right">
     <div class="card-body">

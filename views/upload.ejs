@@ -4,21 +4,20 @@ Upload your application source code to the Software Security Center portal (requ
 
 
 <form action="/upload" method="POST" enctype="multipart/form-data">
-<div class="mb-3">
-    <input type="file" class="form-control" name="file" />
-</div>
-
-<div class="form-floating mb-3">
-    <input class="form-control" id="token" name="token" value="<%- token %>" type="text" placeholder="<%- token %>" />
-    <label for="token">Token (provided in your welcome package)</label>
-</div>
-
-<div class="mb-3">
-<input class="btn btn-primary btn-lg form-control" type="submit" />
-</div>
+    <div class="mb-3">
+        <input type="file" class="form-control" name="file" />
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" id="token" name="token" value="<%- token %>" type="text" />
+        <label for="token">Token (provided in your welcome package)</label>
+    </div>
+    <div class="mb-3">
+        <input class="btn btn-primary btn-lg form-control" type="submit" />
+    </div>
+</form>
 
 <% if ((typeof submission==="undefined")?false:submission) { %>
-    <div class="card text-center" style="width: 18rem;">
+<div class="card text-center" style="width: 18rem;">
     <i class="bi-cloud-check icon-feature text-gradient d-block mb-3"></i>
     <div class="card-body">
         <h3 class="font-alt">Submitted Successfully</h3>
@@ -28,9 +27,9 @@ Upload your application source code to the Software Security Center portal (requ
             <a class="btn btn-outline-primary btn-lg text-gradient" href="/status/<%- token %>"><i class="bi-patch-question"></i> Check job status</a> 
         </p>
     </div>
-    </div>
+</div>
 <% } else { %>
-    <div class="mb-3">
+<div class="mb-3">
     <ul style="color:red">
         <% if ((typeof messages==="undefined")==false) { 
             messages.forEach(($)=>{ %>
@@ -39,9 +38,12 @@ Upload your application source code to the Software Security Center portal (requ
     </ul>
     <% if ((typeof jobtoken==="undefined")?false:jobtoken) { %>
     <p class="text-center">
-        <a class="btn btn-outline-primary btn-lg text-gradient" href="/status/<%- token %>"><i class="bi-patch-question"></i> Check job status</a> 
+        <form action="/status" method="POST">
+        <input type="hidden" name="token" value="<%- token %>" />
+        <button type="submit" class="btn btn-outline-primary btn-lg text-gradient"><i class="bi-patch-question"></i> Check job status</button> 
+        </form>
     </p>
     <% } %>
-    </div>
+</div>
 <% } %>
-</form>
+<%- partial('partial/curl') %>

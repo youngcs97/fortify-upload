@@ -2,7 +2,7 @@
 const debug = !module.parent
 const $ = function (message) { if (debug) console.log(message) }
 const rq = require("request");
-const config = require("./fortify-api.config.json");
+const config = require("./.config.json").ssc;
 const { urlencoded } = require("express");
 const _ = {
     url: config.url,
@@ -595,7 +595,6 @@ async function test() {
         { name: "OWASP_ASVS_4.0", id: "28083E33-760F-4A1A-AADA-738CC60082AD" },
         { name: "GDPR", id: "771C470C-9274-4580-8556-C12F5E4BEC51" }
     ]
-    let firsttime = true
     groupingtypes.forEach(async (t)=>{
         const x = await issues.projectissueswithdetails("MyApp","1.0", t.id)
         fs.writeFileSync(`${x.projectVersionId}_${t.name}.json`, JSON.stringify(x, null, 4))

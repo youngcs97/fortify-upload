@@ -1,8 +1,26 @@
 <% layout('/layout') %>
 
-Quick and dirty filter
+List SAST security issues for a particular Project
 
-
+<form action="/sast/issues" method="POST">
+  <div class="form-floating mb-3">
+    <input class="form-control" id="token" name="token" value="<%- token %>" type="text" />
+    <label for="token">Token (provided in your welcome package)</label>
+  </div>
+  <div class="form-floating mb-3">
+    <select class="form-select" name="group" id="floatingSelectGroup" aria-label="Group by">
+      <% [["","None (default)"],["CWE","CWE"],["OWASPASVS40","OWASPASVS40"],["GDPR","GDPR"]].forEach((x)=> { 
+        s = (group==x[0]) ? "selected" : ""
+        %>
+        <option value="<%- x[0] %>" <%- s %>><%- x[1] %></option>
+      <% }) %>
+    </select>
+    <label for="floatingSelectGroup">Group by</label>
+  </div>
+  <div class="mb-3">
+    <input class="btn btn-primary btn-lg form-control" type="submit" value="Lookup security issues" />
+  </div>
+</form>
 <% if ((typeof messages==="undefined")?false:messages) { %>
   <div class="mb-3">
     <ul style="color:red">
@@ -12,9 +30,12 @@ Quick and dirty filter
     </ul>
   </div>
 <% } %>
+<%- partial('../partial/curl') %>
 
-
-<% if (!(typeof data.issueGroups.data==="undefined")) { %>
+<% 
+if (!(typeof data==="undefined")&&(data!=null)&&!(typeof data.issueGroups==="undefined")&&!(typeof data.issueGroups.data==="undefined")) { %>
+<div class="card text-right">
+  <div class="card-body">
   <table class="table">
     <thead>
       <tr>
@@ -26,12 +47,13 @@ Quick and dirty filter
       </tr>
     </thead>
     <tbody>
-      <% for (var j=0; j<data.issueGroups.data.length; j++) { 
+      <% for (var j=0; j<data.issues.data.length; j++) { 
         ig = data.issueGroups.data[j]
         is = data.issues.data[j].responses[0].body.data
-        %>
+        if (data.issues.data.length==data.issueGroups.data.length) { %>
         <tr class="table-primary"><td colspan="4"><%- ig.cleanName %></td></tr>
-        <% for (var i=0; i<is.length; i++) { 
+        <% } 
+          for (var i=0; i<is.length; i++) { 
           it = is[i]
           %>
           <tr>
@@ -45,5 +67,7 @@ Quick and dirty filter
       <% } %>
     </tbody>
   </table>
+  </div>
+</div>
 <% } %>
 

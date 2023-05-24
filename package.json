@@ -8,18 +8,21 @@
     "serverstart": "DEBUG=express-locallibrary-tutorial:* npm run devstart"
   },
   "dependencies": {
+    "@azure/cosmos": "^3.17.3",
     "compression": "^1.7.4",
     "debug": "~2.6.9",
-    "ejs": "^2.4.2",
+    "ejs": "^3.1.9",
     "ejs-locals": "^1.0.2",
-    "express": "~4.16.1",
+    "express": "^4.18.2",
     "express-async-handler": "^1.2.0",
     "express-fileupload": "^1.4.0",
+    "helmet": "^7.0.0",
     "http-errors": "~1.6.3",
     "https-proxy-agent": "^6.1.0",
     "jszip": "^3.10.1",
     "morgan": "~1.9.1",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "sqlite3": "^5.1.6"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"

@@ -100,7 +100,7 @@ const zip = {
                 }
             }
             const z = zip.base(name(path))
-            await dir(_.resolve(path), z.base+"/").catch(e => console.log(e))
+            await dir(_.resolve(path), z.base+"/").catch(e => $(e))
             await Promise.all(p)
             resolve(z)
         });
@@ -171,7 +171,6 @@ const zip = {
                     resolve(z)
                 }  
             }, function (r)  {   //regular file, place it at the Src root
-                $("zip.buffer.reject")
                 const z = zip.base()
                 const n = z.base+"/"+name
                 z.file(n, data)
@@ -327,7 +326,8 @@ const upload = {
                 "accept" : "application/json",
                 "accept-encoding" : "gzip,deflate",
                 "fortify-client" : client
-            }
+            }, 
+            encoding: null
         }
         $(`${o.method} ${o.url}`)
         return upload.request(o, null, false);

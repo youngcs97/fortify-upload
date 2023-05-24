@@ -1,11 +1,11 @@
 <% layout('/layout') %>
 
-Request and download a report for a Project Version Id
+Request and download the report for a particular Project.  Please be patient as the report may take a few seconds to process.
 
-<form action="/sast/report" method="GET">
+<form action="/sast/report" method="POST">
   <div class="form-floating mb-3">
-    <input class="form-control" id="version" name="version" value="<%- version %>" type="text" placeholder="<%- version %>" />
-    <label for="token">Project Version ID</label>
+    <input class="form-control" id="token" name="token" value="<%- token %>" type="text" />
+    <label for="token">Token (provided in your welcome package)</label>
   </div>
   <div class="mb-3">
     <input class="btn btn-primary btn-lg form-control" type="submit" value="Request a PDF report" />
@@ -20,3 +20,4 @@ Request and download a report for a Project Version Id
     </ul>
   </div>
 <% } %>
+<%- partial('../partial/curl') %>

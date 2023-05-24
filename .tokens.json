@@ -1,0 +1,18 @@
+{
+    "tokens": [
+        {
+            "id": "helloworld",
+            "token": "********-****-****-****-************",
+            "project": "MyProject",
+            "version": "1.0",
+            "user": "something@domain.com"
+        },
+        {
+            "id": "************************************************",
+            "token": "********-****-****-****-************",
+            "project": "MyProject",
+            "version": "2.0",
+            "user": "somthing@else.com"
+        }
+    ]
+}
