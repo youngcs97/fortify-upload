@@ -2,9 +2,9 @@
 
 Check the scan status for a particular Project
 
-<form action="/sast" method="POST">
+<form action="/sast" method="POST" class="needs-validation">
   <div class="form-floating mb-3">
-    <input class="form-control" id="token" name="token" value="<%- token %>" type="text" />
+    <input class="form-control" required="true" id="token" name="token" value="<%- token %>" type="text" />
     <label for="token">Token (provided in your welcome package)</label>
   </div>
   <div class="mb-3">

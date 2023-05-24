@@ -1,9 +1,9 @@
 <% layout('/layout') %>
 
 CURL helper for editing tokens.  Enter your Authorization code to continue.
-<form action="/tokens/html" method="POST">
+<form action="/tokens/html" method="POST" class="needs-validation">
     <div class="form-floating mb-3">
-        <input class="form-control" id="authorization" name="authorization" value="<%- authorization %>" type="text" placeholder="<%- authorization %>" />
+        <input class="form-control" required="true" id="authorization" name="authorization" value="<%- authorization %>" type="text" placeholder="<%- authorization %>" />
         <label for="auth">Authorization code</label>
     </div>
     <div class="form-floating mb-3">
@@ -29,24 +29,7 @@ CURL helper for editing tokens.  Enter your Authorization code to continue.
 <% if (!(typeof data==="undefined")&&(data!=null)) { %>
   <div class="card text-right">
     <div class="card-body">
-    <script lang="javascript">
-        function copy(text) {
-            navigator.clipboard.writeText(text)
-            document.getElementById("curl").innerText=text
-        }
-        function post(json) {
-            text = "curl --header \"Content-Type: application/json\" --request POST --data '"+json+"' \"<%- url %>\""
-            copy(text)
-        }
-        function put(json){
-            text = "curl --header \"Content-Type: application/json\" --request PUT --data '"+json+"' \"<%- url %>\""
-            copy(text)
-        }
-        function del(json){
-            text = "curl --header \"Content-Type: application/json\" --request DELETE --data '"+json+"' \"<%- url %>\""
-            copy(text)
-        }
-    </script>
+    <script src="/js/curl-tokens.js"></script>
     <table class="table">
       <thead>
         <tr>
@@ -70,10 +53,10 @@ CURL helper for editing tokens.  Enter your Authorization code to continue.
               <td><%- t.project %></td>
               <td><%- t.version %></td>
               <td><%- t.user %></td>
-              <td>
-                  <a class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="right" title="<%- t.id %>" onclick='javascript:post("<%- JSON.stringify(i).replaceAll("\"","\\\"") %>")'><i class="bi bi-arrow-down-circle"></i></a>
-                  <a class="btn btn-warning btn-sm" onclick='javascript:put("<%- JSON.stringify(t).replaceAll("\"","\\\"") %>")'><i class="bi bi-arrow-up-circle"></i></a>
-                  <a class="btn btn-danger btn-sm" onclick='javascript:del("<%- JSON.stringify(i).replaceAll("\"","\\\"") %>")'><i class="bi bi-trash"></i></a>
+              <td data-json="<%= JSON.stringify(i) %>" data-url="<%= url %>">
+                  <a class="btn btn-success btn-sm curl-http" data-method="POST" data-toggle="tooltip" data-placement="right" title='<%= t.id %>'><i class="bi bi-arrow-down-circle"></i></a>
+                  <a class="btn btn-warning btn-sm curl-http" data-method="PUT" ><i class="bi bi-arrow-up-circle"></i></a>
+                  <a class="btn btn-danger btn-sm curl-http" data-method="DELETE" ><i class="bi bi-trash"></i></a>
               </td>
             </tr>
         <% } %>

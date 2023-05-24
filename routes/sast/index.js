@@ -55,5 +55,4 @@ router.post('/', asyncHandler(async function(req, res, next) {
     })
   }
 }));
-
 module.exports = router;

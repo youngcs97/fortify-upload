@@ -51,7 +51,9 @@
                             <h1 class="display-1 lh-1 mb-3">Build secure software fast.</h1>
                             <p class="lead fw-normal text-muted mb-5">
 
+
 <%- body -%>
+
 
 
                             </p>
@@ -244,17 +246,10 @@
                 </div>
             </div>
         </div>
-        <!-- Bootstrap core JS-->
-        <script src="/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
+        <script src="/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
         <script src="/js/scripts.js"></script>
         <% if ((typeof tooltips === "undefined")?false:tooltips) { %>
-        <script>
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'))
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl)
-            })
-        </script>
+        <script src="/js/tooltips.js"></script>
         <% } %>
     </body>
 </html>
