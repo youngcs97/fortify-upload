@@ -2,11 +2,12 @@ const express = require('express');
 const router = express.Router();
 const asyncHandler = require('express-async-handler')
 
-const html = false  // whether to render to HTML
-
 
 const handler = asyncHandler(function(req, res, next) {
-  let html = ((req.params.option||'').toUpperCase().trim()=="HTML")
+  let html = ((req.params.option||'').toUpperCase().trim()=="HTML")   // whether to render to HTML
+  let enable = (req.params.option||'').toUpperCase().trim()
+  enable = ["ENABLE","REENABLE"].includes(enable)   // whether to renable user for resubmission
+  // whether to render to HTML
   const a = (req.body.authorization||'').trim()
   const f = (req.body.filter||'').trim()
   let m = []  // holds error messages for client display
@@ -45,25 +46,28 @@ const handler = asyncHandler(function(req, res, next) {
   if (tokens.authorized(a)==false) return render("Not authorized")
 
   const id = (req.body.id||"").trim()
+  const fulfilled = async function(r) { return evaluate(r, id) }
+  const rejected = async function(r) { return evaluate(null, id) }
   switch (req.method.toUpperCase()) {
     case "PUT":
-      tokens.update(id,req.body).then(
-        (r)=>{ return evaluate(r, id) },
-        (r)=>{ return evaluate(null, id) }
-      )
+      if (id.length==0) return render("No token ID provided")
+      if (enable) {
+        tokens.reenable(id).then(fulfilled, rejected)
+      } else {
+        tokens.update(id,req.body).then(fulfilled, rejected)
+      }
       break;
     case "DELETE":
-      tokens.delete(id).then(
-        (r)=>{ return evaluate(r, id) },
-        (r)=>{ return evaluate(null, id) }
-      )
+      if (id.length==0) return render("No token ID provided")
+      tokens.delete(id).then(fulfilled, rejected)
       break;
     default:
       if (id.length > 0) {
-        tokens.get(id).then(
-          (r)=>{ return evaluate(r, id) },
-          (r)=>{ return evaluate(null, id) }
-        )
+        if (enable) {
+          tokens.reenable(id).then(fulfilled, rejected)
+        } else {
+          tokens.get(id).then(fulfilled, rejected)
+        }
       } else {
         let p = {}
         if (f.length>0) {

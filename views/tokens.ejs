@@ -44,6 +44,7 @@ CURL helper for editing tokens.  Enter your Authorization code to continue.
           t = data[j] 
           i = {}
           i.id = t.id
+          r = ((t.submit!=null)&&(t.submit.token!=null))
           i.authorization = authorization
           delete t.previous
           delete t.submit
@@ -53,10 +54,13 @@ CURL helper for editing tokens.  Enter your Authorization code to continue.
               <td><%- t.project %></td>
               <td><%- t.version %></td>
               <td><%- t.user %></td>
-              <td data-json="<%= JSON.stringify(i) %>" data-url="<%= url %>">
-                  <a class="btn btn-success btn-sm curl-http" data-method="POST" data-toggle="tooltip" data-placement="right" title='<%= t.id %>'><i class="bi bi-arrow-down-circle"></i></a>
-                  <a class="btn btn-warning btn-sm curl-http" data-method="PUT" ><i class="bi bi-arrow-up-circle"></i></a>
-                  <a class="btn btn-danger btn-sm curl-http" data-method="DELETE" ><i class="bi bi-trash"></i></a>
+              <td>
+                  <a class="btn btn-dark btn-sm curl-http" data-json="<%= JSON.stringify(i) %>" data-method="POST" data-url="<%= url %>" data-toggle="tooltip" data-placement="right" title='<%= t.id %>'><i class="bi bi-arrow-down-circle"></i></a>
+                  <a class="btn btn-warning btn-sm curl-http" data-json="<%= JSON.stringify(t) %>" data-method="PUT" data-url="<%= url %>"><i class="bi bi-arrow-up-circle"></i></a>
+                  <a class="btn btn-danger btn-sm curl-http" data-json="<%= JSON.stringify(i) %>" data-method="DELETE" data-url="<%= url %>"><i class="bi bi-trash"></i></a>
+                  <% if (r) { %>
+                  <a class="btn btn-success btn-sm curl-http" data-json="<%= JSON.stringify(i) %>" data-method="POST" data-url="<%= url %>/reenable"><i class="bi bi-toggle-on"></i></a>  
+                  <% } %>
               </td>
             </tr>
         <% } %>
