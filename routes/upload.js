@@ -72,7 +72,7 @@ router.post('/', asyncHandler(async function(req, res, next) {
         }
 
         // check for previous submissions and verify dates
-        if (s==null) {
+        if ((s==null)||((s.token||"").trim().length==0)) {
           return submit()    // if no previous submission date, submit
         } else {
           let o = s.time
