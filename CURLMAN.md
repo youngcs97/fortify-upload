@@ -1,8 +1,6 @@
 # fortify-upload using CURL
 Below are examples how to interact with this Express application via CURL
 
-`Note: I have changed all command lines to support the "*/json" accept header.  Not providing a JSON-compatible accept type will return HTML instead.` 
-
 # [![curl logo](https://curl.se/logo/curl-logo.svg)](https://curl.se/)
 
 or, if you are old-school like me...
@@ -81,8 +79,36 @@ SET DEBUG=fortify-upload:* & npm run devstart
 
 Now startup a browser to [http://localhost:4000](http://localhost:4000) and voila, "Bob's your uncle"
 
+
+>
+>
+> ## If pictures are worth a thousand words, videos must be millions!
+>
+> Note the curl `coaching` card to help with syntax:
+> [![Youtube](youtube.png)](https://youtu.be/oxnUeXrasMQ)
+>
+>
+
+
+
+To make this application curl-friendly, all routes/endpoints/urls support the `"*/json"` accept header.  Not providing a `JSON`-compatible accept type will return `HTML` instead. Example:
+
+```console
+
+# this is how curl/apis do it...
+root@localhost fortify-upload % curl -H "accept:*/json" http://localhost:4000/<any>
+    --* returns JSON *--
+# this is how browsers do it...
+root@localhost fortify-upload % curl http://localhost:4000/<any>
+    --* returns HTML *--
+
+```
+
+
+
+
 ----------
-## ScanCentral Packaging
+## (Optional) Pre-requiste: ScanCentral Packaging
 
 To effectively test, you'll need some source code to zip up and package.  The scancentral client cli has a `package` command.
 
@@ -108,10 +134,10 @@ The process below is the curl command line equivalent of working with the `/uplo
 
 ![Upload Screen](upload.png)
 
-First, be sure to edit [.tokens.json](.tokens.json) so that it contains valid tokens.  Each token object contains several properties:
+First, be sure to edit [.tokens.json](.tokens.json) (or the data record if using a DB-type data persistence) so that it contains valid tokens.  Each token object contains several properties:
 
-1. **id** : Single-Use-Token that can be freeform and as complex as you desire.  This is the lookup key (examples use `helloworld`) when running curl commands below.
-2. **token** : A valid ScanCentral token in the GUID-style format
+1. **id** : Single-Use-Token that can be freeform and as complex as you desire.  This is the lookup key (examples use `helloworld`) when running curl commands below.  The video refers to this as a "synthetic" token.  It is the ONLY field intended for sharing with end-users.
+2. **token** : A valid ScanCentral token in the GUID-style format (not shared with end users, stored in the database only with the fields below)
 3. **project**: The project name this scan will apply to in SSC (example `XYZ`)
 4. **version**: The version to which this will apply (example `8.0`)
 5. **user**: Some value that uniquely identifies the submitting user (email makes a great choice)
@@ -150,7 +176,7 @@ Keep-Alive: timeout=5
 
 ```
 
-After a few seconds, the job should show up under `ScanCentral` > `SAST` > `Scan Requests`:
+After a few seconds, the job should show up in the back-end SSC system under `ScanCentral` > `SAST` > `Scan Requests`:
 
 ![Scam Requests](sastjobs.png)
 
@@ -241,3 +267,5 @@ root@localhost fortify-upload % curl -H "accept:*/json" http://localhost:4000/sa
 ```
 
 Note: Currently this command takes a few seconds to run.  Although fetched asyncronously, the report generation itself may take a few seconds on the server.  Thus, the HTTP handler probes SCC for a report id handle every few seconds until the report completes.  It would be a good idea to throttle this handler similar to the one-time token use.
+
+
