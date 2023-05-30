@@ -1,11 +1,20 @@
 # fortify-upload
-An example Node/Express site that demonstrates how to package and upload files to a Fortify Static Code Analyzer (SAST) controller.
+An example Node/Express site that demonstrates how to package and upload files to a Fortify Static Code Analyzer (SAST) controller without any client-side installation.
 
 ![Upload Screen](upload.png)
 
-The main functions are in a CommonJS module called [fortify-upload.js](fortify-upload.js)
+The main functions are in a CommonJS module called [fortify-upload.js](fortify-upload.js).  This application is also CURL friendly with all routes/endpoints support adding a `"*/json"` accept header to change their output to JSON instead of HTML.  The HTML interface also offers "coaching" on how to issue the CURL commands:  As you type into the HTML forms, a bootstrap card will show the CURL commands that duplicate the form submission.  See the ![CURLMAN.md](CURLMAN.md) page or watch this video for more details:
+
+
+ [![Youtube](youtube.png)](https://youtu.be/oxnUeXrasMQ)
+
+
+
 
 Originally I kept the data persistence very simple using a JSON file.  I am currently branching out to use a CosmosDB and will likely develop other connectors.  Read below for how to configure.
+
+
+
 
 ----------
 ## Configuration
@@ -125,6 +134,78 @@ main()
 For your ease, I've included an example app to scan called [vulnerable-node-master.zip](vulnerable-node-master.zip).  It is also available in directory form [vulnerable-node-master/](vulnerable-node-master/).
 
 
+----------
+## Alternative Method for Uploading: ScanCentral Packaging and FCLI
+
+Besides this Express application, there are alternative methods to package and submit SAST jobs.  Below is documentation on how to issue identical commands through:
+
+1. `The ScanCentral Client`: [Install](https://www.microfocus.com/documentation/fortify-software-security-center/2220/SC_SAST_Guide_22.2.0.pdf) the latest [Scan Central Client](https://tools.fortify.com/scancentral/Fortify_ScanCentral_Client_Latest.zip).  At the time of this writing, version [22.1.0](https://tools.fortify.com/scancentral/Fortify_ScanCentral_Client_22.1.0_x64.zip) is the active version.  This [github actions project](https://github.com/fortify/gha-setup-scancentral-client) is also handy.
+2. `FCLI`: Available [here](https://github.com/fortify/fcli) 
+3. `JavaScript` using the [fortify-upload.js](fortify-upload.js) CommonJS module
 
 
+
+ScanCentral SAST controllers can be quite picky about their acceptable input format for source code.  Thus, it is best to begin by issuing a `package` command using the scancentral client cli.
+
+
+```console
+
+cd /some/directory/where/your/source/code/lives
+
+scancentral package -o sourcecode.packaged.zip -bt none
+
+```
+
+At the conclusion of this step, you'll have a zip file called `sourcecode.packaged.zip` with this basic format:
+
+> 
+> - `sourcecode.packaged.zip`
+>   - `translation.zip`
+>       - `Src/`  : A directory containing the original source code (example: the contents from /some/directory/where/your/source/code/lives)
+>       - `metadata` : A manifest file describing which root directory to scan (usually /Src).  See zip.metadata() in the [fortify-upload.js](fortify-upload.js) for a better understanding.
+>
+
+
+The ScanCentral `pacakge` command is best for advanced use cases, but simple projects can be zipped using regular old zip tools.  Be sure to follow the desired format listed above, including making a `metadata` file.  This JavaScript code from fortify-upload.js](fortify-upload.js) performs the same similar task:
+
+``` Javascript
+async function main() {
+    const x = await zip.translationFromInput("/some/directory/where/your/source/code/lives")    // Directory
+    fs.writeFileSync("sourcecode.packaged.zip", x)
+}
+main()
+```
+
+After you have packaged your source code, the follow commands are identical across the 3 implementations:
+
+``` console
+
+# ScanCentral
+scancentral -url https://scsastctrl.fortifyhosted.com/scancentral-ctrl start -upload --application MyProject --application-version 1.0 --package sourcecode.packaged.zip -uptoken `token`
+
+# FCLI
+fcli sc-sast session login -c=`client_auth_key` --ssc-url=https://ssc.fortifyhosted.com/ -t=`token`
+fcli sc-sast scan start --package-file=sourcecode.packaged.zip --appversion=MyProject:1.0 --sensor-version=22.2.2.0004
+fcli sc-sast session logout
+
+```
+
+``` Javascript
+
+async function main() {
+    const x = require("fs").readFileSync("sourcecode.packaged.zip")
+    const y = await u.upload("https://scsastctrl.fortifyhosted.com/scancentral-ctrl",x,"sourcecode.packaged.zip","client_auth_key","token", "MyProject", "1.0", "username")
+   console.log(y)
+   // returns:  { token: 'jobtoken', detailsMessage: null }
+}
+main()
+
+```
+You could also CURL it:
+
+```
+
+curl -H "accept: application/json" -H "fortify-client: client_auth-key" -F "zipFile=@sourcecode.packaged.zip" -F "username=usename-from-curl" -F "scaVersion=22.2.1.0003" -F "scaRuntimeArgs=" -F "uploadToken=token" -F "jobType=TRANSLATION_AND_SCAN_JOB" -F "clientVersion=22.2.1.0003" -F "projectName=MyProject" -F "projectVersion=1.0" https://scsastctrl.fortifyhosted.com/scancentral-ctrl/rest/v2/job
+
+```
 
