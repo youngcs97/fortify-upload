@@ -3,7 +3,7 @@ An example Node/Express site that demonstrates how to package and upload files t
 
 ![Upload Screen](upload.png)
 
-The main functions are in a CommonJS module called [fortify-upload.js](fortify-upload.js).  This application is also CURL friendly with all routes/endpoints support adding a `"*/json"` accept header to change their output to JSON instead of HTML.  The HTML interface also offers "coaching" on how to issue the CURL commands:  As you type into the HTML forms, a bootstrap card will show the CURL commands that duplicate the form submission.  See the ![CURLMAN.md](CURLMAN.md) page or watch this video for more details:
+The main functions are in a CommonJS module called [fortify-upload.js](fortify-upload.js).  This application is also CURL friendly with all routes/endpoints support adding a `"*/json"` accept header to change their output to JSON instead of HTML.  The HTML interface also offers "coaching" on how to issue the CURL commands:  As you type into the HTML forms, a bootstrap card will show the CURL commands that duplicate the form submission.  See the [CURLMAN.md](CURLMAN.md) page or watch this video for more details:
 
 
  [![Youtube](youtube.png)](https://youtu.be/oxnUeXrasMQ)
@@ -166,7 +166,7 @@ At the conclusion of this step, you'll have a zip file called `sourcecode.packag
 >
 
 
-The ScanCentral `pacakge` command is best for advanced use cases, but simple projects can be zipped using regular old zip tools.  Be sure to follow the desired format listed above, including making a `metadata` file.  This JavaScript code from fortify-upload.js](fortify-upload.js) performs the same similar task:
+The ScanCentral `pacakge` command is best for advanced use cases, but simple projects can be zipped using regular old zip tools.  Be sure to follow the desired format listed above, including making a `metadata` file.  This JavaScript code from [fortify-upload.js](fortify-upload.js) performs the same similar task:
 
 ``` Javascript
 async function main() {
@@ -176,7 +176,7 @@ async function main() {
 main()
 ```
 
-After you have packaged your source code, the follow commands are identical across the 3 implementations:
+After you have packaged your source code, the following commands are identical across the 3 implementations:
 
 ``` console
 
