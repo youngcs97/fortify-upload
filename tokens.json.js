@@ -84,8 +84,6 @@ const tokens = {
             })
         })
     },
-
-    // below this need to be remediated to json
     update: async function(id, update) {
         return new Promise(async function(resolve, reject) {
             fs.readFile(path,"utf-8", (err, data)=> {
