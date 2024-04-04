@@ -1,3 +1,5 @@
+// New Line for John Simpson
+
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -7,7 +9,7 @@ const logger = require('morgan');
 const app = express();
 app.use(require('helmet')())
 app.use(require('compression')());
-// view engine setup
+
 app.engine('ejs', require('ejs-locals'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
